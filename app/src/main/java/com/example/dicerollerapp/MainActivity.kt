@@ -6,11 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,7 +40,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DiceRollerAndImage()
+                    DiceRollerAndImage(
+                        Modifier
+                            .fillMaxSize()
+                            .background(Color.White)
+                            .wrapContentSize(Alignment.Center)
+                    )
                 }
             }
         }
@@ -47,30 +54,37 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun DiceRollerAndImage(
-    modifier: Modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)
-        .wrapContentSize(Alignment.Center)
+    modifier: Modifier
 ) {
 
-    var result by remember { mutableStateOf(1) }
-    val imageResource = when (result) {
-        1 -> R.drawable.dice_1
-        2 -> R.drawable.dice_2
-        3 -> R.drawable.dice_3
-        4 -> R.drawable.dice_4
-        5 -> R.drawable.dice_5
-        else -> R.drawable.dice_6
-    }
+    var firstDiceNbOfPips by remember { mutableStateOf(1) }
+    var secondDiceNbOfPips by remember { mutableStateOf(1) }
+    val firstDice = getImage(firstDiceNbOfPips)
+    val secondDice = getImage(secondDiceNbOfPips)
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(painter = painterResource(id = imageResource), contentDescription = result.toString())
+        Row {
+            Image(
+                painter = painterResource(id = firstDice),
+                contentDescription = firstDiceNbOfPips.toString()
+            )
+            Image(
+                painter = painterResource(id = secondDice),
+                contentDescription = secondDiceNbOfPips.toString()
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             modifier = Modifier,
-            onClick = { result = (1..6).random() }
+            onClick = {
+                firstDiceNbOfPips = (1..6).random()
+                secondDiceNbOfPips = (1..6).random()
+            },
+            colors = ButtonDefaults.buttonColors(Color(0xFF8F0AA7))
         ){
             Text(text = stringResource(R.string.roll))
         }
@@ -80,5 +94,10 @@ fun DiceRollerAndImage(
 @Preview()
 @Composable
 fun DiceRollerAndImagePreview() {
-    DiceRollerAndImage()
+    DiceRollerAndImage(
+        Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .wrapContentSize(Alignment.Center)
+    )
 }
