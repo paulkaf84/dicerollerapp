@@ -83,7 +83,8 @@ fun DiceRollerAndImage(
                 enabled1 = !enabled1
             },
             rotated = true,
-            enabled2
+            enabled2,
+            playerName = "Paul"
         )
 
         ImageComponent(dice1 = firstDice, dice2 = secondDice, rotated = enabled2)
@@ -96,21 +97,24 @@ fun DiceRollerAndImage(
                 enabled1 = !enabled1
             },
             rotated = false,
-            enabled1
+            enabled1,
+            playerName = "Jlk"
         )
     }
 }
 
 @Composable
-fun PlayerCommand(onClick: () -> Unit, rotated: Boolean, enabled: Boolean) {
+fun PlayerCommand(onClick: () -> Unit, rotated: Boolean, enabled: Boolean,playerName: String) {
     Column(
         modifier = if(rotated) Modifier.rotate(180f) else Modifier
     ) {
+        Text(text = playerName)
+
         Button(
             modifier = Modifier
                 .fillMaxWidth(),
             onClick = onClick,
-            colors = ButtonDefaults.buttonColors(Color(0xFF8F0AA7)),
+            colors = ButtonDefaults.buttonColors(Color(0xFF2196F3)),
             enabled = enabled
         ) {
             Text(text = stringResource(R.string.roll))
