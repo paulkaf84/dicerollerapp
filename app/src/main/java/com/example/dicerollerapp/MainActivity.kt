@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,6 +29,9 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dicerollerapp.ui.theme.DiceRollerAppTheme
@@ -84,7 +88,7 @@ fun DiceRollerAndImage(
             },
             rotated = true,
             enabled2,
-            playerName = "Paul"
+            playerName = "Player Paul"
         )
 
         ImageComponent(dice1 = firstDice, dice2 = secondDice, rotated = enabled2)
@@ -98,7 +102,7 @@ fun DiceRollerAndImage(
             },
             rotated = false,
             enabled1,
-            playerName = "Jlk"
+            playerName = "Player Jlk"
         )
     }
 }
@@ -108,11 +112,19 @@ fun PlayerCommand(onClick: () -> Unit, rotated: Boolean, enabled: Boolean,player
     Column(
         modifier = if(rotated) Modifier.rotate(180f) else Modifier
     ) {
-        Text(text = playerName)
+        Text(
+            text = playerName,
+            modifier = Modifier
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight(600)
+        )
 
         Button(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(8.dp),
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(Color(0xFF2196F3)),
             enabled = enabled
