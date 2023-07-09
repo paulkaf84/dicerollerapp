@@ -8,10 +8,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -34,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.dicerollerapp.ui.theme.DiceRollerAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -88,7 +92,7 @@ fun DiceRollerAndImage(
             },
             rotated = true,
             enabled2,
-            playerName = "Player Paul"
+            playerName = "Player PAUL"
         )
 
         ImageComponent(dice1 = firstDice, dice2 = secondDice, rotated = enabled2)
@@ -102,7 +106,7 @@ fun DiceRollerAndImage(
             },
             rotated = false,
             enabled1,
-            playerName = "Player Jlk"
+            playerName = "Player JLK"
         )
     }
 }
@@ -120,16 +124,20 @@ fun PlayerCommand(onClick: () -> Unit, rotated: Boolean, enabled: Boolean,player
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight(600)
         )
-
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(bottom = 42.dp),
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(Color(0xFF2196F3)),
             enabled = enabled
         ) {
-            Text(text = stringResource(R.string.roll))
+            Text(
+                text = stringResource(R.string.roll),
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight(600),
+                fontSize = 24.sp
+            )
         }
     }
 }
