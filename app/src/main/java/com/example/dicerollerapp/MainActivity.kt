@@ -5,7 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -75,39 +77,48 @@ fun DiceRollerAndImage(
     val firstDice = Dice(firstDiceNbOfPips)
     val secondDice = Dice(secondDiceNbOfPips)
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
+    Box(
+        modifier = Modifier
+            .clickable {
+                firstDiceNbOfPips = (1..6).random()
+                secondDiceNbOfPips = (1..6).random()
+                enabled2 = !enabled2
+            }
     ) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
 
-        PlayerCommand(
-            onClick = {
-                firstDiceNbOfPips = (1..6).random()
-                secondDiceNbOfPips = (1..6).random()
-                enabled2 = !enabled2
-                enabled1 = !enabled1
-            },
-            rotated = true,
-            enabled2,
-            playerName = "Player PAUL"
-        )
+            PlayerCommand(
+                onClick = {
+                    firstDiceNbOfPips = (1..6).random()
+                    secondDiceNbOfPips = (1..6).random()
+                            enabled2 = !enabled2
+                            enabled1 = !enabled1
+                },
+                rotated = true,
+                enabled2,
+                playerName = "Player PAUL"
+            )
 
-        ImageComponent(dice1 = firstDice, dice2 = secondDice, rotated = enabled2)
+            ImageComponent(dice1 = firstDice, dice2 = secondDice, rotated = enabled2)
 
-        PlayerCommand(
-            onClick = {
-                firstDiceNbOfPips = (1..6).random()
-                secondDiceNbOfPips = (1..6).random()
-                enabled2 = !enabled2
-                enabled1 = !enabled1
-            },
-            rotated = false,
-            enabled1,
-            playerName = "Player JLK"
-        )
+            PlayerCommand(
+                onClick = {
+                    firstDiceNbOfPips = (1..6).random()
+                    secondDiceNbOfPips = (1..6).random()
+                    enabled2 = !enabled2
+                    enabled1 = !enabled1
+                },
+                rotated = false,
+                enabled1,
+                playerName = "Player JLK"
+            )
+        }
     }
 }
 
@@ -124,21 +135,6 @@ fun PlayerCommand(onClick: () -> Unit, rotated: Boolean, enabled: Boolean,player
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight(600)
         )
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 42.dp),
-            onClick = onClick,
-            colors = ButtonDefaults.buttonColors(Color(0xFF2196F3)),
-            enabled = enabled
-        ) {
-            Text(
-                text = stringResource(R.string.roll),
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight(600),
-                fontSize = 24.sp
-            )
-        }
     }
 }
 
@@ -166,6 +162,7 @@ fun ImageComponent(dice1: Dice, dice2: Dice, rotated: Boolean) {
 @Composable
 fun DiceRollerAndImagePreview() {
     DiceRollerAndImage(
+
         Modifier
             .fillMaxSize()
             .background(Color.White)
