@@ -5,11 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,9 +44,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     DiceRollerAndImage(
                         Modifier
-                            .fillMaxSize()
                             .background(Color.White)
-                            .wrapContentSize(Alignment.Center)
                     )
                 }
             }
@@ -59,35 +59,82 @@ fun DiceRollerAndImage(
 
     var firstDiceNbOfPips by remember { mutableStateOf(1) }
     var secondDiceNbOfPips by remember { mutableStateOf(1) }
-    val firstDice = getImage(firstDiceNbOfPips)
-    val secondDice = getImage(secondDiceNbOfPips)
+    var playerTurn by remember { mutableStateOf(1) }
+    val isSecond by remember { mutableStateOf(false) }
+    var enabled1 by remember { mutableStateOf(true) }
+    var enabled2 by remember { mutableStateOf(false) }
+
+    val firstDice = Dice(firstDiceNbOfPips)
+    val secondDice = Dice(secondDiceNbOfPips)
 
     Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row {
-            Image(
-                painter = painterResource(id = firstDice),
-                contentDescription = firstDiceNbOfPips.toString()
-            )
-            Image(
-                painter = painterResource(id = secondDice),
-                contentDescription = secondDiceNbOfPips.toString()
-            )
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            modifier = Modifier,
+        PlayerCommand(
             onClick = {
                 firstDiceNbOfPips = (1..6).random()
                 secondDiceNbOfPips = (1..6).random()
+                enabled2 = !enabled2
+                enabled1 = !enabled1
             },
-            colors = ButtonDefaults.buttonColors(Color(0xFF8F0AA7))
-        ){
+            rotated = true,
+            enabled2
+        )
+
+        ImageComponent(dice1 = firstDice, dice2 = secondDice, rotated = enabled2)
+
+        PlayerCommand(
+            onClick = {
+                firstDiceNbOfPips = (1..6).random()
+                secondDiceNbOfPips = (1..6).random()
+                enabled2 = !enabled2
+                enabled1 = !enabled1
+            },
+            rotated = false,
+            enabled1
+        )
+    }
+}
+
+@Composable
+fun PlayerCommand(onClick: () -> Unit, rotated: Boolean, enabled: Boolean) {
+    Column(
+        modifier = if(rotated) Modifier.rotate(180f) else Modifier
+    ) {
+        Button(
+            modifier = Modifier
+                .fillMaxWidth(),
+            onClick = onClick,
+            colors = ButtonDefaults.buttonColors(Color(0xFF8F0AA7)),
+            enabled = enabled
+        ) {
             Text(text = stringResource(R.string.roll))
         }
+    }
+}
+
+@Composable
+fun ImageComponent(dice1: Dice, dice2: Dice, rotated: Boolean) {
+    Row(
+        modifier = if(rotated) Modifier.rotate(180f) else Modifier.fillMaxWidth()
+    ) {
+        Image(
+            painter = painterResource(id = dice1.face),
+            contentDescription = dice1.pips.toString(),
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+        )
+        Image(
+            painter = painterResource(id = dice2.face),
+            contentDescription = dice2.pips.toString(),
+            modifier = Modifier
+                .fillMaxWidth()
+        )
     }
 }
 
